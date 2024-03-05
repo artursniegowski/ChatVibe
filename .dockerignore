@@ -1,0 +1,51 @@
+# this files will be ignored by Dockerfile
+# for exmaple if we had a command COPY . . 
+# this woudl copy evertyhing except what is in this file
+
+# Git
+.git
+.gitignore
+# Docker
+.docker
+
+# Ignore other files or directories not relevant to Docker build
+*.log
+*.swp
+.DS_Store
+
+# Python
+# this would be porbably the same
+# **/__pypackages__/ - unfortunately this is not supported by docker
+backend/app/__pypackages__/
+backend/app/*/__pypackages__/
+backend/app/*/*/__pypackages__/
+backend/app/*/*/*/__pypackages__/
+
+# Ignore files and directories specific to Django backend
+backend/__pycache__/
+backend/*.pyc
+backend/docker/
+backend/media/
+backend/static/
+
+# Ignore files and directories specific to React frontend
+frontend/node_modules/
+frontend/build/
+frontend/.env
+
+# enviroments
+# for files
+.env
+.venv
+# for directories
+.env/
+.venv/
+env/
+venv/
+ENV/
+
+
+
+
+
+

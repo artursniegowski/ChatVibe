@@ -1,0 +1,22 @@
+
+project_root/
+│
+├── backend/                 # Django Backend Application
+│   ├── app/                 # Django App Code
+│   ├── docker/              # Docker Configuration (optional)
+│   │   ├── Dockerfile       # Dockerfile for Django Backend
+│   │   └── ...              # Other Docker-related files (optional)
+│   └── ...                  # Other Django-related files
+│
+├── frontend/                # React Frontend Application
+│   ├── public/              # Public files (HTML, assets)
+│   ├── src/                 # React App Source Code
+│   ├── Dockerfile           # Dockerfile for React Frontend
+│   └── ...                  # Other React-related files
+│
+├── database/                # PostgreSQL Database (optional)
+│   ├── data/                # Database Data (mounted volume)
+│   └── ...                  # Other database-related files
+│
+├── .dockerignore            # Docker Ignore file
+└── docker-compose.yml 
