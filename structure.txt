@@ -2,21 +2,41 @@
 project_root/
 │
 ├── backend/                 # Django Backend Application
+|   ├── venv/                # Virtual environment directory - NOT INCLUDED!
 │   ├── app/                 # Django App Code
+|   |   └── ...              # Other Django App Code (optional)
 │   ├── docker/              # Docker Configuration (optional)
 │   │   ├── Dockerfile       # Dockerfile for Django Backend
 │   │   └── ...              # Other Docker-related files (optional)
+│   ├── requirements/        # requirements.txt file for python
+│   │   ├── base.txt         # base requirements for porduction and development - common - it is used as base and read in, in the other files
+│   │   ├── dev.txt          # requirements for development - python packages
+│   │   └── ...              # Other requirements files (optional)
 │   └── ...                  # Other Django-related files
 │
 ├── frontend/                # React Frontend Application
 │   ├── public/              # Public files (HTML, assets)
 │   ├── src/                 # React App Source Code
-│   ├── Dockerfile           # Dockerfile for React Frontend
+│   ├── docker/              # Docker Configuration (optional)
+│   │   ├── Dockerfile       # Dockerfile for React Frontend
+│   │   └── ...              # Other Docker-related files (optional)
 │   └── ...                  # Other React-related files
 │
 ├── database/                # PostgreSQL Database (optional)
 │   ├── data/                # Database Data (mounted volume)
+│   ├── docker/              # Docker Configuration (optional)
+│   │   ├── Dockerfile       # Dockerfile for database
+│   │   └── ...              # Other Docker-related files (optional)
 │   └── ...                  # Other database-related files
 │
 ├── .dockerignore            # Docker Ignore file
 └── docker-compose.yml 
+└── .envs/                   # environment variables files
+│   ├── .dev/                # environment variables files used in development - NOT INCLUDED !
+│   │   ├── .django          # environment variables used in development in Django
+│   │   └── .postgres        # environment variables used in development in postgres
+│   │   └── ...              # Other files
+│   ├── .dev-example/        # environment variables files used in development for reference
+│       ├── .django          # environment variables used in development in Django for reference need adjustment to your project spec
+|       └── .postgres        # environment variables used in development in postgres for reference need adjustment to your project spec
+

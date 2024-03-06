@@ -1,0 +1,8 @@
+# .django.example is a fall back file if the enviroment file .django dosent exists
+# default values in the .django.example file.
+
+POSTGRES_DB_HOST=db
+POSTGRES_DB=devdb
+POSTGRES_USER=changeme_dbuser
+POSTGRES_PASSWORD=changeme_password
+POSTGRES_PORT=5432
