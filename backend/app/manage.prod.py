@@ -6,8 +6,8 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    # TODO: default set to development settings, replace the whole file for production!
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings.dev")
+    # TODO: set to production settings, use this file in production!
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings.prod")
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

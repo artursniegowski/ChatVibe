@@ -1,5 +1,5 @@
-# .django.example is a fall back file if the enviroment file .django dosent exists
-# default values in the .django.example file.
+# .dev-example/.django is a fall back file if the enviroment file .dev/.django dosent exists
+# default values in the .dev-example/.django file.
 
 DJANGO_SECRET_KEY='django-insecure-q8x%r=5hpm6m$9-*zsl%%c)^5qo7#k$w(p8s+)jelwssq16ph9'
 DJANGO_ALLOWED_HOSTS=127.0.0.1

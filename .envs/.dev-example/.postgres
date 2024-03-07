@@ -1,5 +1,5 @@
-# .django.example is a fall back file if the enviroment file .django dosent exists
-# default values in the .django.example file.
+# .dev-example/.postgres is a fall back file if the enviroment file .dev/.postgres dosent exists
+# default values in the .dev-example/.postgres file.
 
 POSTGRES_DB_HOST=db
 POSTGRES_DB=devdb

@@ -11,7 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-# TODO: default set to development settings, replace the whole file for production!
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings.dev")
+# TODO: set to production settings, use this file in production!
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings.prod")
 
 application = get_wsgi_application()
