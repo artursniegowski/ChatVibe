@@ -87,6 +87,7 @@ start-project:
 start-project-exec:
 	docker-compose exec backend sh -c "django-admin startproject app ."
 
+# make start-app=app_name
 start-app:
 	docker-compose run --rm backend sh -c "python manage.py startapp $(app)"
 

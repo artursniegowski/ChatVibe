@@ -2,5 +2,6 @@
 # default values in the .dev-example/.django file.
 
 DJANGO_SECRET_KEY='django-insecure-q8x%r=5hpm6m$9-*zsl%%c)^5qo7#k$w(p8s+)jelwssq16ph9'
+# this can be a comma seperated list like 127.0.0.1,162.1.1.1,my-page.com
 DJANGO_ALLOWED_HOSTS=127.0.0.1
 DEBUG=1

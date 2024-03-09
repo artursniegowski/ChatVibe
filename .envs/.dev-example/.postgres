@@ -2,7 +2,7 @@
 # default values in the .dev-example/.postgres file.
 
 POSTGRES_DB_HOST=db
-POSTGRES_DB=devdb
+POSTGRES_DB=database_name
 POSTGRES_USER=changeme_dbuser
 POSTGRES_PASSWORD=changeme_password
 POSTGRES_PORT=5432
