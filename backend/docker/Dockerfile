@@ -34,9 +34,9 @@ RUN apk add --update --no-cache postgresql-libs postgresql-dev musl-dev && \
     chmod -R 755 /vol && \
    # Create directory for coverage files - only used for Github actions
    # otherwise I would have to run commands as root user in Github actions
-    mkdir -p /cov && \
-    chown -R django-user:django-user /cov && \
-    chmod -R 755 /cov
+    mkdir -p app/cov && \
+    chown -R django-user:django-user app/cov && \
+    chmod -R 755 app/cov
 
 ENV PATH="/py/bin:$PATH"
 
