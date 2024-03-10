@@ -31,7 +31,7 @@ jobs:
         # run test and collect coverage data, we need to run this as root
         # this solves the permission issues, 
         # coverage needs user to own the directory where .coverage file is located
-        # since i dont want to add new directory in Docker or change users
+        # since I dont want to add a new directory in Docker,
         # runnign this command as root user seems a good alternative
         # other solution would be creating a directory in Dockerfile
         # that is owned by djanog-user and save the .coverage file there
@@ -39,8 +39,9 @@ jobs:
         run: docker-compose run --rm --user root backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run manage.py test"
       -
+        # also running as root user this command to solve the issues with permissions
         name: Generate coverage XML reports
-        run: docker-compose run --rm backend sh -c "coverage xml"
+        run: docker-compose run --rm --user root backend sh -c "coverage xml"
       - 
         name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
