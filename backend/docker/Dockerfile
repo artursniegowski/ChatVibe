@@ -1,4 +1,4 @@
-FROM python:3.12-alpine3.19
+FROM python:3.12-alpine
 LABEL maintainer="artursniegowski"
 
 ENV PYTHONDONTWRITEBYTECODE 1 
