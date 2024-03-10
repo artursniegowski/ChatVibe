@@ -36,12 +36,12 @@ jobs:
         # other solution would be creating a directory in Dockerfile
         # that is owned by djanog-user and save the .coverage file there
         name: Test
-        run: docker-compose run --rm --user root backend sh -c "python manage.py wait_for_db && 
+        run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run --data-file=cov/.coverage manage.py test"
       -
         # also running as root user this command to solve the issues with permissions
         name: Generate coverage XML reports
-        run: docker-compose run --rm --user root backend sh -c "coverage xml --data-file=cov/.coverage -o cov/coverage.xml"
+        run: docker-compose run --rm backend sh -c "coverage xml --data-file=cov/.coverage -o cov/coverage.xml"
       - 
         name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
