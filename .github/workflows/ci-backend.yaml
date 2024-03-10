@@ -36,7 +36,7 @@ jobs:
       - 
         name: Test
         run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
-                                                    coverage run --rcfile=cov/.coverage manage.py test"
+                                                    coverage run --data-file=cov/.coverage manage.py test"
         # run test and collect coverage data,
         # save the .coverage reports in the cov/ directory to avoid the 
         # permissions issues
