@@ -31,9 +31,12 @@ jobs:
       - name: Print user information
         run: docker-compose run --rm backend sh -c "id"
       - name: Create directory and set ownership
-        run: docker-compose run --rm backend sh -c "mkdir -p /cov && chown -R django-user:django-user /cov"
+        run: docker-compose run --rm backend sh -c "sudo mkdir -p /cov && sudo chown -R django-user:django-user /cov"
       - name: List data
         run: docker-compose run --rm backend sh -c "ls -la"
+      - name: Test
+        run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
+                                                    coverage run manage.py test"
       #
       - 
         name: Test
