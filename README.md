@@ -1,5 +1,10 @@
 # ChatVibe
 
+[![GitHub marketplace](https://img.shields.io/badge/marketplace-docker--login-blue?logo=github&style=flat-square)](https://github.com/marketplace/actions/docker-login) 
+[![Test and Lint](https://github.com/artursniegowski/ChatVibe/actions/workflows/ci-backend.yaml/badge.svg?branch=main)](https://github.com/artursniegowski/ChatVibe/actions/workflows/ci-backend.yaml)
+[![codecov](https://codecov.io/gh/artursniegowski/ChatVibe/graph/badge.svg?token=1ZJ2SDYVZL)](https://codecov.io/gh/artursniegowski/ChatVibe)
+
+
 ChatVibe is a full-stack web application built with Django REST Framework for the backend and React for the frontend. The application aims to provide a platform for users to engage in real-time chat conversations within categorized servers and channels, similar to popular platforms like Discord.
 
 The backend of ChatVibe utilizes Django REST Framework to manage user authentication, server, and channel creation, as well as handling WebSocket connections for real-time communication. It also integrates with PostgreSQL database to store user data, server configurations, and chat histories.

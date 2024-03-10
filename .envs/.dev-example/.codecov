@@ -1,0 +1,4 @@
+# this file is NOT USED - serves just as information for your secrets - settings in the repo
+# needs to be created in your https://about.codecov.io/ account - get token for your repository
+# it has to be set as secrets in your Github account, in your repository!
+CODECOV_TOKEN_CHATVIBE="here_comes_your_token_for_the_repo"

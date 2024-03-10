@@ -1,0 +1,43 @@
+---
+name: CI Backend
+
+on:
+  push:
+    branches: main
+
+jobs: 
+  lint-test-coverage:
+    name: Lint, Test, and Coverage
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Checkout
+        uses: actions/checkout@v4
+      - 
+        name: Rename .envs/.dev-example/ folder to .envs/.dev/
+        run: mv .envs/.dev-example .envs/.dev
+        # This step renames the .envs/.dev-example/ folder to .envs/.dev/
+        # the .envs/.dev/ is used in docker-compose file
+      - 
+        name: Lint
+        run: docker-compose run --rm backend sh -c "flake8"
+      - 
+        name: Test
+        run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && coverage run manage.py test"
+        # run test and collect coverage data
+      -
+        name: Create coverage reports
+        run: docker-compose run --rm backend sh -c "coverage xml"
+      - 
+        name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN_CHATVIBE }}
+          slug: artursniegowski/ChatVibe
+        

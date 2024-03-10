@@ -1,0 +1,6 @@
+# this file is NOT USED - serves just as information for your secrets - settings in the repo
+# the .dev-example/ has to be cahnged to .dev/
+# needs to be created in your DockerHub account - create access token
+# it has to be set as secrets in your Github account, in your repository!
+DOCKERHUB_USER="your_username"
+DOCKERHUB_TOKEN="your_token"

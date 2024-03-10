@@ -1,3 +1,4 @@
+# the .dev-example/ has to be cahnged to .dev/
 # .dev-example/.django is a fall back file if the enviroment file .dev/.django dosent exists
 # default values in the .dev-example/.django file.
 

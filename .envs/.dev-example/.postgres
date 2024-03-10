@@ -1,3 +1,4 @@
+# the .dev-example/ has to be cahnged to .dev/
 # .dev-example/.postgres is a fall back file if the enviroment file .dev/.postgres dosent exists
 # default values in the .dev-example/.postgres file.
 
