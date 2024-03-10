@@ -20,33 +20,24 @@ jobs:
         name: Checkout
         uses: actions/checkout@v4
       - 
-        name: Rename .envs/.dev-example/ folder to .envs/.dev/
-        run: mv .envs/.dev-example .envs/.dev
         # This step renames the .envs/.dev-example/ folder to .envs/.dev/
         # the .envs/.dev/ is used in docker-compose file
+        name: Rename .envs/.dev-example/ folder to .envs/.dev/
+        run: mv .envs/.dev-example .envs/.dev
       - 
         name: Lint
         run: docker-compose run --rm backend sh -c "flake8"
-      #
-      - name: Print user information
-        run: docker-compose run --rm backend sh -c "id"
-      # - name: Create directory and set ownership
-        # run: docker-compose run --rm backend sh -c "sudo mkdir -p /cov && sudo chown -R django-user:django-user /cov"
-      - name: List data
-        run: docker-compose run --rm backend sh -c "ls -la"
-      - name: Test
+      - 
+        # run test and collect coverage data, we need to run this as root
+        # this solves the permission issues, 
+        # coverage needs user to own the directory where .coverage file is located
+        # since i dont want to add new directory in Docker or change users
+        # runnign this command as root user seems a good alternative
+        # other solution would be creating a directory in Dockerfile
+        # that is owned by djanog-user and save the .coverage file there
+        name: Test
         run: docker-compose run --rm --user root backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run manage.py test"
-      #
-      - 
-        name: Test
-        run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
-                                                    python manage.py test"
-        # run test and collect coverage data,
-      - 
-        name: Test
-        run: docker-compose run --rm backend sh -c "coverage run manage.py test"
-        # run test and collect coverage data,
       -
         name: Generate coverage XML reports
         run: docker-compose run --rm backend sh -c "coverage xml"
