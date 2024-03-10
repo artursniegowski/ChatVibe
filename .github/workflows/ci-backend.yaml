@@ -29,14 +29,14 @@ jobs:
         run: docker-compose run --rm backend sh -c "flake8"
       - 
         name: Create coverage directory
-        run: mkdir -p cov/
+        run: mkdir -p ${{ github.workspace }}/cov
         # this is needed only for github-actions as the .coverage cant be
         # created by another user than the user specified in the docker and
         # this would lead to persmissions issues
       - 
         name: Test
         run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
-                                                    coverage run --data-file=/cov/.coverage manage.py test"
+                                                    coverage run --data-file=cov/.coverage manage.py test"
         # run test and collect coverage data,
         # save the .coverage reports in the cov/ directory to avoid the 
         # permissions issues
