@@ -38,12 +38,12 @@ jobs:
         # then also adjusting docker compose and making this directory
         # persistant if we woudl want to run command with --rm (removing containers at the end)
         name: Test
-        run: docker-compose run --rm backend --user root sh -c "python manage.py wait_for_db && 
+        run: docker-compose run --rm --user root backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run manage.py test"
       -
         # also running as root user this command to solve the issues with permissions
         name: Generate coverage XML reports
-        run: docker-compose run --rm backend --user root sh -c "coverage xml"
+        run: docker-compose run --rm --user root backend sh -c "coverage xml"
       - 
         name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
