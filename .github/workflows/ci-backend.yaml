@@ -31,7 +31,7 @@ jobs:
         name: Create coverage directory
         run: | 
           mkdir -p cov/
-          chown -R django-user cov/
+          chown -R 777 cov/
         # this is needed only for github-actions as the .coverage cant be
         # created by another user than the user specified in the docker and
         # this would lead to persmissions issues
