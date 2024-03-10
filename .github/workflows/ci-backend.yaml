@@ -1,5 +1,5 @@
 ---
-name: CI Backend - Lint, Test, and Coverage
+name: CI Backend - Lint, Test
 
 on:
   push:
@@ -43,6 +43,11 @@ jobs:
         name: Test
         run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run --data-file=/cov/.coverage manage.py test"
+      ##
+      - 
+        name: List data
+        run: docker-compose run --rm backend sh -c "ls -la ../cov"
+      ##
       -
         # also running as root user this command to solve the issues with permissions
         name: Generate coverage XML reports
