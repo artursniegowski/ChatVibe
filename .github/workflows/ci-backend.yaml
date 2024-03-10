@@ -30,7 +30,11 @@ jobs:
       - 
         name: Test
         run: docker-compose run --rm backend sh -c "python manage.py wait_for_db && 
-                                                    coverage run manage.py test"
+                                                    python manage.py test"
+        # run test and collect coverage data,
+      - 
+        name: Test
+        run: docker-compose run --rm backend sh -c "coverage run manage.py test"
         # run test and collect coverage data,
       -
         name: Generate coverage XML reports
