@@ -1,10 +1,27 @@
 
 project_root/
 │
+├── .envs/                   # environment variables files
+│   ├── .dev/                # environment variables files used in development - NOT INCLUDED !
+│   │   ├── .codecov         # environment variables used in github repository as secrets from codecov.io - file is not used - just for information
+│   │   ├── .django          # environment variables used in development in Django
+│   │   ├── .docker_hub      # environment variables used in github repository as secrets from docker_hub - file is not used - just for information
+│   │   └── .postgres        # environment variables used in development in postgres
+│   │   
+│   └── .dev-example/        # environment variables files used in development - just for reference
+│       ├── .codecov         # environment variables used in github repository as secrets from codecov.io - file is not used - just for information
+│       ├── .django          # environment variables used in development in Django for reference need adjustment to your project spec
+│       ├── .docker_hub      # environment variables used in github repository as secrets from docker_hub - file is not used - just for information
+│       └── .postgres        # environment variables used in development in postgres for reference need adjustment to your project spec
+│
+├── .github/                 # github workflows - configuration for Github Actions
+│   └── workflows/
+│       └── ci-backend.yaml  # github action workflow
+│
 ├── backend/                 # Django Backend Application
-|   ├── venv/                # Virtual environment directory - NOT INCLUDED!
+│   ├── venv/                # Virtual environment directory - NOT INCLUDED!
 │   ├── app/                 # Django App Code
-|   |   └── ...              # Other Django App Code (optional)
+│   │   └── ...              # Other Django App Code (optional)
 │   ├── docker/              # Docker Configuration (optional)
 │   │   ├── Dockerfile       # Dockerfile for Django Backend
 │   │   └── ...              # Other Docker-related files (optional)
@@ -14,6 +31,12 @@ project_root/
 │   │   └── ...              # Other requirements files (optional)
 │   └── ...                  # Other Django-related files
 │
+├── database/                # PostgreSQL Database (optional)
+│   ├── docker/              # Docker Configuration (optional)
+│   │   ├── Dockerfile       # Dockerfile for database
+│   │   └── ...              # Other Docker-related files (optional)
+│   └── ...                  # Other database-related files
+│
 ├── frontend/                # React Frontend Application
 │   ├── public/              # Public files (HTML, assets)
 │   ├── src/                 # React App Source Code
@@ -22,21 +45,9 @@ project_root/
 │   │   └── ...              # Other Docker-related files (optional)
 │   └── ...                  # Other React-related files
 │
-├── database/                # PostgreSQL Database (optional)
-│   ├── data/                # Database Data (mounted volume)
-│   ├── docker/              # Docker Configuration (optional)
-│   │   ├── Dockerfile       # Dockerfile for database
-│   │   └── ...              # Other Docker-related files (optional)
-│   └── ...                  # Other database-related files
-│
 ├── .dockerignore            # Docker Ignore file
-└── docker-compose.yml 
-└── .envs/                   # environment variables files
-│   ├── .dev/                # environment variables files used in development - NOT INCLUDED !
-│   │   ├── .django          # environment variables used in development in Django
-│   │   └── .postgres        # environment variables used in development in postgres
-│   │   └── ...              # Other files
-│   ├── .dev-example/        # environment variables files used in development for reference
-│       ├── .django          # environment variables used in development in Django for reference need adjustment to your project spec
-|       └── .postgres        # environment variables used in development in postgres for reference need adjustment to your project spec
-
+├── .gitignore               # Git Ignore file
+├── docker-compose.yml       # docker-compose main fail
+├── Makefile                 # Make file with all the commands for make
+├── README.md                # Readme for the porject
+└── structure.txt            # depicting the project structure of the folders/files

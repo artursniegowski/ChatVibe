@@ -20,9 +20,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v4
       - 
-        # This step renames the .envs/.dev-example/ folder to .envs/.dev/
-        # the .envs/.dev/ is used in docker-compose file
-        name: Rename .envs/.dev-example/ folder to .envs/.dev/
+        name: Rename .envs/.dev-example/ directory to .envs/.dev/
         run: mv .envs/.dev-example .envs/.dev
       - 
         name: Lint
@@ -36,7 +34,7 @@ jobs:
         # other solution would be creating a directory in Dockerfile
         # that is owned by djanog-user and save the .coverage file there
         # then also adjusting docker compose and making this directory
-        # persistant if we woudl want to run command with --rm (removing containers at the end)
+        # persistant if we would want to run command with --rm (removing containers at the end)
         name: Test
         run: docker-compose run --rm --user root backend sh -c "python manage.py wait_for_db && 
                                                                 coverage run manage.py test"

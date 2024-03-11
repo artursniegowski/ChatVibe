@@ -35,6 +35,6 @@ if settings.DEBUG:
     ]
 
 
-admin.site.site_header = "ChatVibe Dashboard"
-admin.site.site_title = "ChatVibe Dashboard"
-admin.site.index_title = "ChatVibe Dashboard"
+admin.site.site_header = "ChatVibe Dashboard Admin"
+admin.site.site_title = "ChatVibe Admin Portal"
+admin.site.index_title = "Welcome to ChatVibe Dashboard"
