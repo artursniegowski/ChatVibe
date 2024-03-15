@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     # Local/custom apps
     "core.apps.CoreConfig",
     "users.apps.UsersConfig",
+    "server.apps.ServerConfig",
 ]
 
 MIDDLEWARE = [

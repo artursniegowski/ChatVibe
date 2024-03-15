@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 
-from users.tests.base import BaseTestUser
+from utils.tests.base import BaseTestUser
 
 User = get_user_model()
 
@@ -12,7 +12,6 @@ class AdminTestCase(TestCase, BaseTestUser):
 
     def setUp(self):
         self.client = Client()
-        BaseTestUser.__init__(self)
         # login as admin
         self.admin_user = self.get_test_superuser()
         self.client.force_login(self.admin_user)

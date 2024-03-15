@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
-from users.tests.base import BaseTestUser
+from utils.tests.base import BaseTestUser
 
 User = get_user_model()
 
@@ -11,10 +11,6 @@ class CustomUserModelTestCase(TestCase, BaseTestUser):
     """Test suit for the custom User model"""
 
     def setUp(self) -> None:
-        # print(CustomUserModelTestCase.mro())
-        # as per mro!
-        # super(unittest.case.TestCase, self).__init__()
-        BaseTestUser.__init__(self)
         self.active_regular_user = self.get_test_active_regularuser()
         self.inactive_regular_user = self.get_test_inactive_regularuser()
         self.super_user = self.get_test_superuser()
