@@ -49,16 +49,22 @@ ALLOWED_HOSTS.extend(
 # Application definition
 
 INSTALLED_APPS = [
+    # django apps - START
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # Local/custom apps
+    # django apps - END
+    # Local/custom apps - START
     "core.apps.CoreConfig",
     "users.apps.UsersConfig",
     "server.apps.ServerConfig",
+    # Local/custom apps - END
+    # third party apps - START
+    "drf_spectacular",
+    # third party apps - END
 ]
 
 MIDDLEWARE = [
@@ -170,3 +176,18 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # update Django settings to use the custom user model
 AUTH_USER_MODEL = "users.User"
+
+# rest framework settings
+REST_FRAMEWORK = {
+    # register our spectacular AutoSchema with DRF
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# https://drf-spectacular.readthedocs.io/en/latest/readme.html#installation
+SPECTACULAR_SETTINGS = {
+    "TITLE": "ChatVibe API",
+    "DESCRIPTION": "The application aims to provide a platform for users to engage in real-time chat "
+    + "conversations within categorized servers and channels, similar to popular platforms like Discord.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": True,
+}
