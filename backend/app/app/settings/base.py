@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     # Local/custom apps - END
     # third party apps - START
     "drf_spectacular",
+    "rest_framework",
     # third party apps - END
 ]
 
@@ -181,6 +182,12 @@ AUTH_USER_MODEL = "users.User"
 REST_FRAMEWORK = {
     # register our spectacular AutoSchema with DRF
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    # https://www.django-rest-framework.org/api-guide/settings/#default_authentication_classes
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        # using the default django sesion authentication
+        # TODO: later change to JWT tokens or something more convinent!
+        "rest_framework.authentication.SessionAuthentication",
+    ],
 }
 
 # https://drf-spectacular.readthedocs.io/en/latest/readme.html#installation

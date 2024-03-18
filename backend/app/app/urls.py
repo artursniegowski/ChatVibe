@@ -27,20 +27,21 @@ from drf_spectacular.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("health/", include("core.urls")),
+    path("api/health/", include("core.urls")),
     # drf_spectacular - schema to download
-    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/schema/", SpectacularAPIView.as_view(), name="schema"),
     # Optional GUI - spectacualr / swagger - documentation:
     path(
-        "api/schema/swagger-ui/",
+        "api/docs/schema/swagger-ui/",
         SpectacularSwaggerView.as_view(url_name="schema"),
         name="swagger-ui",
     ),
     path(
-        "api/schema/redoc/",
+        "api/docs/schema/redoc/",
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    path("api/", include("server.urls")),
 ]
 
 

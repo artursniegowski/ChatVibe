@@ -78,6 +78,9 @@ coverage-run-html:
 coverage-run-html-exec:
 	docker-compose exec backend sh -c "coverage run manage.py test && coverage html"
 
+# runnign combined - black - isort - flake8
+format:
+	docker-compose run --rm backend sh -c "black --exclude=migrations . && isort . --skip venv --skip migrations && flake8"
 ### linting / test coverege / formating commands - END ###
 
 ### django commands - START ###
