@@ -127,6 +127,12 @@ test:
 test-exec:
 	docker-compose exec backend sh -c "python manage.py test"
 
+test-spec:
+	docker-compose run --rm backend sh -c "python manage.py test $(test)"
+
+test-spec-exec:
+	docker-compose exec backend sh -c "python manage.py test $(test)"
+
 test-parallel:
 	docker-compose run --rm backend sh -c "python manage.py test --parallel auto"
 

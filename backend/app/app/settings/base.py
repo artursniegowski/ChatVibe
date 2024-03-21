@@ -167,8 +167,8 @@ MEDIA_URL = "static/media/"
 # This will copy all files from your static folders into the STATIC_ROOT
 # directory.
 
-STATIC_ROOT = "/vol/web/media"
-MEDIA_ROOT = "/vol/web/static"
+STATIC_ROOT = "/vol/web/static"
+MEDIA_ROOT = "/vol/web/media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

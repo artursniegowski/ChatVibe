@@ -12,7 +12,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "created", "modified"]
     list_filter = ["name", "created", "modified"]
     search_fields = ["name"]
-    fields = ["id", "name", "description", "created", "modified"]
     readonly_fields = ["id", "created", "modified"]
 
 

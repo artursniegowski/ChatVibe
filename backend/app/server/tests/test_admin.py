@@ -219,7 +219,7 @@ class ChannelAdminTestCase(TestCase, BaseTestUser):
         self.assertContains(response, formatted_modified)
 
 
-class ServerlAdminTestCase(TestCase, BaseTestUser):
+class ServerAdminTestCase(TestCase, BaseTestUser):
     """Test Suit for the Server admin"""
 
     def setUp(self):
