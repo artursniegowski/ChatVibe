@@ -2,6 +2,9 @@
 build:
 	docker-compose build
 
+build-no-cache:
+	docker-compose build --no-cache
+
 up:
 	docker-compose up -d
 
@@ -145,3 +148,17 @@ django-checklist-deployment:
 django-checklist-deployment-exec:
 	docker-compose exec backend sh -c "python manage.py check --deploy"
 ### django commands - END ###
+### react-vite commands - START ###
+create-vite:
+	docker-compose run --rm frontend sh -c "npm create vite ."
+
+npm-install:
+	docker-compose run --rm frontend sh -c "npm install"
+
+# npm-install-app app=nodemon
+npm-install-app:
+	docker-compose run --rm frontend sh -c "npm install $(test)"
+
+run-frontend:
+	docker-compose up -d frontend
+### react-vite commands - END ###

@@ -8,6 +8,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
+    # TODO: dont forget to delete for production, you dont want to mirror ./backend/app:/app:z, this is only for local dev
       - ./backend/app:/app:z  # mirrors the changes made in the app folder to the container an vice versa
       - dev-static-data:/vol/web
     command: >
@@ -32,6 +33,26 @@ services:
       - postgres-data:/var/lib/postgresql/data
     env_file:
       - ./.envs/.dev/.postgres
+
+  frontend:
+    container_name: react-frontend
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: ./docker/dev/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+    # TODO: dont forget to delete for production, you dont want to mirror ./frontend/app:/app:z, this is only for local dev
+    # same for - /app/node_modules/ bc it is only here to bc of the first mount
+      - ./frontend/app:/app:z  # mirrors the changes made in the app folder to the container an vice versa
+      # ensure that the node_modules directory inside the container retains its contents and is not affected by changes in the host directory.
+      # only needed bc we miroring changes above.
+      - /app/node_modules/  # Exclude node_modules from the volume mount 
+    command: >
+      sh -c "npm run dev -- --port 3000"
+    depends_on:
+      - backend
 
 volumes:
   dev-static-data:

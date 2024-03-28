@@ -13,24 +13,10 @@
 *.swp
 .DS_Store
 
-# Python
-# this would be porbably the same
-# **/__pypackages__/ - unfortunately this is not supported by docker
-backend/app/__pypackages__/
-backend/app/*/__pypackages__/
-backend/app/*/*/__pypackages__/
-backend/app/*/*/*/__pypackages__/
-
-# Ignore files and directories specific to Django backend
-backend/__pycache__/
-backend/*.pyc
-backend/docker/
-
-
 # Ignore files and directories specific to React frontend
-frontend/node_modules/
-frontend/build/
-frontend/.env
+app/build
+app/dist
+app/node_modules
 
 # enviroments
 # for files
@@ -42,9 +28,3 @@ frontend/.env
 env/
 venv/
 ENV/
-
-
-
-
-
-
