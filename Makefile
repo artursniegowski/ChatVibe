@@ -157,7 +157,7 @@ npm-install:
 
 # npm-install-app app=nodemon
 npm-install-app:
-	docker-compose run --rm frontend sh -c "npm install $(test)"
+	docker-compose run --rm frontend sh -c "npm install $(app)"
 
 run-frontend:
 	docker-compose up -d frontend
