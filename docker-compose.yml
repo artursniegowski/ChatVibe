@@ -5,6 +5,10 @@ services:
     build:
       context: ./backend
       dockerfile: ./docker/Dockerfile
+    # TODO: use expose later, so the contianer will not be accesible to public
+    # and only in the docker network, which will be enough for nginx
+    # expose:
+    #   - 8000
     ports:
       - "8000:8000"
     volumes:
@@ -13,6 +17,7 @@ services:
       - dev-static-data:/vol/web
     command: >
       sh -c "python manage.py wait_for_db &&
+             python manage.py collectstatic --noinput &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:8000"
     env_file:
@@ -27,6 +32,10 @@ services:
     build:
       context: ./database
       dockerfile: ./docker/Dockerfile
+    # TODO: use expose later, so the contianer will not be accesible to public
+    # and only in the docker network, which will be enough for nginx
+    # expose:
+    #   - 5432
     ports:
       - "5432:5432"
     volumes:
@@ -40,6 +49,10 @@ services:
     build:
       context: ./frontend
       dockerfile: ./docker/dev/Dockerfile
+    # TODO: use expose later, so the contianer will not be accesible to public
+    # and only in the docker network, which will be enough for nginx
+    # expose:
+    #   - 3000
     ports:
       - "3000:3000"
     volumes:
@@ -53,6 +66,24 @@ services:
       sh -c "npm run dev -- --port 3000"
     depends_on:
       - backend
+
+  nginx:
+    container_name: nginx-proxy
+    restart: unless-stopped
+    build:
+      context: ./proxy
+      dockerfile: ./docker/dev/Dockerfile
+    ports:
+      - "8080:80"
+      - "80:80"
+    volumes:
+      - dev-static-data:/vol/static
+    env_file:
+      - ./.envs/.dev/.nginx
+    depends_on:
+      - backend
+      - frontend
+
 
 volumes:
   dev-static-data:

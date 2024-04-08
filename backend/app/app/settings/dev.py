@@ -23,6 +23,20 @@ if DEBUG:
         "10.0.2.2",  # most likely used by virtual machines
     ]
     # Adding IP addresses dynamically based on the local machine's hostname
+    # https://github.com/cookiecutter/cookiecutter-django/blob/df529fc9e4d16bfe16f76e0e620c2f543f740ba3/%7B%7Bcookiecutter.project_slug%7D%7D/config/settings/local.py#L74  # noqa
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [ip[:-1] + "1" for ip in ips]
+    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
+    # adding dynamically ip for nginx - so the tolbar be also visible when served with the proxy
+    # https://stackoverflow.com/questions/64284647/get-nginx-ip-address-in-docker-in-django-settings-py-for-django-debug-toolbar
+    try:
+        _, _, nginx_ips = socket.gethostbyname_ex("nginx")
+        INTERNAL_IPS.extend(nginx_ips)
+    except socket.gaierror:
+        # the nginx service didnt start yet?
+        pass
 # configuration for the debug toolbar - END #
+
+# TODO: not sure if it is needed ?
+# CSRF_TRUSTED_ORIGINS
+# https://docs.djangoproject.com/en/5.0/ref/settings/#csrf-trusted-origins
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']

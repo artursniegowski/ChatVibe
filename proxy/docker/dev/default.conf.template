@@ -1,0 +1,94 @@
+upstream backend {
+    # port 8000 - defined in docker compose
+    server  ${BACKEND_SERVICE}:${BACKEND_PORT};
+}
+
+upstream frontend {
+    # port 3000 - defined in docker compose
+    server ${FRONTEND_SERVICE}:${FRONTEND_PORT};
+}
+
+server {
+    listen ${LISTEN_PORT};
+    server_name ${DOMAIN_NAME};
+    client_max_body_size 50M;
+
+    # backed service - api
+    location /api/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        proxy_pass http://backend;
+        proxy_redirect off;
+    }
+
+    # TODO: cant get the /api/admin to work so for now I have only /admin/
+    # the /api/admin crates problmes with redirect from django
+    # technicaly should be solvebale with usign FORCE_SCRIPT_NAME in django settings
+    # but I was wonderign about a cleaner solution, all from nginx
+    # possible solution with uwsgi, adding the prefix
+    # /admin/
+    location /admin/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        proxy_pass http://backend;
+        proxy_redirect off;
+    }
+
+    # REDIRECT WILL NOT WORK PROPERLY !!!
+    # location /api/admin/ {
+    #     proxy_set_header X-Real-IP $remote_addr;
+    #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header Host $host;
+    #     proxy_pass http://backend/admin/;
+    #     # proxy_redirect default;
+    #     proxy_redirect ~^/admin/(.*)$ /api/admin/$1;
+    #     # proxy_redirect /admin/ /api/admin/;
+    # }
+
+    # backed service - django debug toolbar
+    location /__debug__/ {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        proxy_pass http://backend;
+        proxy_redirect off;
+    }
+
+    # frontend service 
+    location / {
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Host $host;
+        proxy_pass http://frontend;
+        proxy_redirect off;
+    }
+
+    # serving static files and media files from django backend - mounted volumes from nginx
+    location /static {
+        alias /vol/static;
+    }
+
+    # one workaround to get  /api/admin/ working is by creating another domain
+    # just for the admin backend djanog - seperation
+    # server {
+    # listen ${LISTEN_PORT};
+    # server_name admin.${DOMAIN_NAME}; # Admin subdomain
+    # client_max_body_size 50M;
+
+    # # Backend service - Django admin interface
+    # location /admin/ {
+    #     proxy_set_header X-Real-IP $remote_addr;
+    #     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    #     proxy_set_header X-Forwarded-Proto $scheme;
+    #     proxy_set_header Host $host;
+    #     proxy_pass http://backend/admin/;
+    #     proxy_redirect off;
+    # }
+}

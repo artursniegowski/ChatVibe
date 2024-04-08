@@ -16,7 +16,8 @@ Including another URLconf
 """
 
 from django.conf import settings
-from django.conf.urls.static import static
+
+# from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import (
@@ -47,8 +48,12 @@ urlpatterns = [
 
 if settings.DEBUG:
     # for serving files in development - only!!
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # not needed as media and static files served by nginx!
+    # dont forget to run collectstatic to move all the static files!!
+    # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    # debug toolbar active in debug only
     urlpatterns += [
         path("__debug__/", include("debug_toolbar.urls")),
     ]
