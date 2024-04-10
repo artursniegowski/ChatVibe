@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.exceptions import AuthenticationFailed, ValidationError
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+
 from server.models import Server
 from server.schema import server_list_docs
 from server.serializers import ServerSerializer
@@ -38,6 +38,7 @@ class ServerViewSet(viewsets.ViewSet):
     """
     View set for managing server data.
     """
+
     # permission_classes = [IsAuthenticated]
 
     def get_queryset(self):

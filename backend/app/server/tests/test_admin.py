@@ -113,7 +113,7 @@ class ChannelAdminTestCase(TestCase, BaseTestUser):
             name="Test server", owner=self.user, category=self.category
         )
         self.channel = Channel.objects.create(
-            name="First Channel", owner=self.user, server=self.server
+            name="First-Channel-test", owner=self.user, server=self.server
         )
 
     def test_admin_accessible(self):
