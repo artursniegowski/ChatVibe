@@ -36,7 +36,15 @@ if DEBUG:
         pass
 # configuration for the debug toolbar - END #
 
-# TODO: not sure if it is needed ?
 # CSRF_TRUSTED_ORIGINS
+# CSRF_TRUSTED_ORIGINS is a setting used in Django to specify a list of trusted
+# origins from which requests are allowed to be considered safe for CSRF
+# (Cross-Site Request Forgery) protection.
 # https://docs.djangoproject.com/en/5.0/ref/settings/#csrf-trusted-origins
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8080']
+# CSRF_TRUSTED_ORIGINS = ["http://localhost:8080", "http://localhost"]
+
+# CORS HEADERS
+# A list of origins that are authorized to make cross-site HTTP requests.
+# so the orgins from nginx
+# https://pypi.org/project/django-cors-headers/
+CORS_ALLOWED_ORIGINS = ["http://localhost", "http://localhost:8080"]

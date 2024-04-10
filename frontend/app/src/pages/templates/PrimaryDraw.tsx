@@ -1,10 +1,20 @@
-import { Box, useMediaQuery, Typography, styled } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Box, useMediaQuery, styled } from "@mui/material";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import DrawerToggle from "../../components/PrimaryDraw/DrawToggle";
 import MuiDrawer from "@mui/material/Drawer";
 
-const PrimaryDraw = () => {
+type Props = {
+    children: ReactNode;
+};
+
+type ChildProps = {
+    open: boolean;
+};
+
+type ChildElement = React.ReactElement<ChildProps>;
+
+export const PrimaryDraw: React.FC<Props> = ({ children }) => {
     const theme = useTheme();
     const bellow600 = useMediaQuery("(max-width:599px)");
     const [open, setOpen] = useState(!bellow600);
@@ -26,7 +36,7 @@ const PrimaryDraw = () => {
         width: theme.primaryDraw.closed,
     });
 
-    const Drawer = styled(MuiDrawer, {})(({theme, open}) => ({
+    const Drawer = styled(MuiDrawer, {})(({ theme, open }) => ({
         width: theme.primaryDraw.width,
         whiteSpace: "nowrap",
         boxSizing: "border-box",
@@ -50,40 +60,41 @@ const PrimaryDraw = () => {
 
     const handleDrawerClose = () => {
         setOpen(false);
-    };   
+    };
 
     return (
-        <Drawer open={open} variant={ bellow600 ? "temporary" : "permanent" }
-         PaperProps={{
-            sx:{ 
-                mt: `${theme.primaryAppBar.height}px`,
-                height: `calc(100vh - ${theme.primaryAppBar.height}px )`,
-                width: theme.primaryDraw.width,
-            },
-         }}
+        <Drawer open={open} variant={bellow600 ? "temporary" : "permanent"}
+            PaperProps={{
+                sx: {
+                    mt: `${theme.primaryAppBar.height}px`,
+                    height: `calc(100vh - ${theme.primaryAppBar.height}px )`,
+                    width: theme.primaryDraw.width,
+                },
+            }}
         >
             <Box>
-                <Box sx={{ 
-                        position: "absolute", 
-                        top: 0, 
-                        right: 0, 
-                        p: 0, 
-                        width: open ? "auto" : "100%",
-                      }}
+                <Box sx={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    p: 0,
+                    width: open ? "auto" : "100%",
+                }}
                 >
-                    <DrawerToggle 
-                        open={open} 
+                    <DrawerToggle
+                        open={open}
                         handleDrawerClose={handleDrawerClose}
-                        handleDrawerOpen={handleDrawerOpen}
+                        handleDrawerOpen={handleDrawerOpen} 
                     />
-                {[...Array(50)].map((_, i)=> (
-                    <Typography key={i} paragraph>
-                      {i+1}
-                    </Typography>
-                  ))}
                 </Box>
+                {React.Children.map( children, (child) => {
+                    return React.isValidElement(child) 
+                    ? React.cloneElement(child as ChildElement, {open})
+                    : child;
+                })}
             </Box>
         </Drawer>
     );
 };
+
 export default PrimaryDraw;

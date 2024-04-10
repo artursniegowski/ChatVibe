@@ -66,6 +66,8 @@ services:
       sh -c "npm run dev -- --port 3000"
     depends_on:
       - backend
+    env_file:
+      - ./.envs/.dev/.frontend
 
   nginx:
     container_name: nginx-proxy
