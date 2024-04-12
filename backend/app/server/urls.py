@@ -10,7 +10,9 @@ from server import views
 # this will generate the endpoints for servers
 router = DefaultRouter(trailing_slash=False)
 router.register("servers", views.ServerViewSet, basename="server")
-
+router.register(
+    "servers/categories", views.CategoryViewSet, basename="category"
+)  # Register CategoryViewSet
 
 app_name = "server"
 

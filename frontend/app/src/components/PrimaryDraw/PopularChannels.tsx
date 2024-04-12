@@ -6,7 +6,7 @@ import { BACKEND_MEDIA_URL } from "../../config";
 import { Link } from "react-router-dom";
 
 interface Server {
-    id: number,
+    id: string,
     name: string,
     category: string,
     icon: string,

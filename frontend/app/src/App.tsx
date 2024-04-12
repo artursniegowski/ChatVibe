@@ -1,23 +1,25 @@
 // import React from "react";
 import { ThemeProvider } from "@emotion/react";
 import Home from "./pages/Home";
+import Explore from "./pages/Home";
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from "react-router-dom";
 import createMuiTheme from "./theme/theme";
+import ToggleColorMode from "./components/ToggleColorMode";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={ <Home />} />
+      <Route path="/explore/:categoryName" element={ <Explore />} />
     </Route>
   )
 );
 
 const App = () => {
-  const theme = createMuiTheme();
   return (
-    <ThemeProvider theme={ theme } >
+    <ToggleColorMode >
       <RouterProvider router={router} />
-    </ThemeProvider>
+    </ToggleColorMode>
   ); 
 };
 

@@ -2,6 +2,8 @@ import { AppBar, Toolbar, Typography, Link, Box, IconButton, Drawer, useMediaQue
 import { useTheme } from "@mui/material/styles";
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useEffect, useState } from "react";
+import ExplorerCategories from "../../components/SecondaryDraw/ExplorerCategories";
+import AccountButton from "../../components/PrimaryAppBar/AccountButton";
 
 const PrimaryAppBar = () => {
     const [sideMenu, setSideMenu] = useState(false);
@@ -21,7 +23,7 @@ const PrimaryAppBar = () => {
       (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
         if (
           event.type === "keydown" &&
-          // makign sure teh keys that normaly are used to navigate teh website
+          // makign sure teh keys that normaly are used to navigate the website
           // will not cause the drawer to expand or collapse
           ((event as React.KeyboardEvent).key === "Tab" ||
            (event as React.KeyboardEvent).key === "Shift")
@@ -30,6 +32,16 @@ const PrimaryAppBar = () => {
         }
         setSideMenu(open);
     };
+
+    const list = () => (
+      <Box 
+        sx={{ paddingTop: `${theme.primaryAppBar.height}px`, minWidth: 200 }}
+        onClick={toggleDrawer(false)}
+        onKeyDown={toggleDrawer(false)}
+      >
+        <ExplorerCategories />
+      </Box>
+    )
 
     return (
         <AppBar 
@@ -59,11 +71,7 @@ const PrimaryAppBar = () => {
                   </IconButton>
                 </Box>
                 <Drawer anchor="left" open={sideMenu} onClose={toggleDrawer(false)}>
-                  {[...Array(100)].map((_, i)=> (
-                    <Typography key={i} paragraph>
-                      {i+1}
-                    </Typography>
-                  ))}
+                  {list()}
                 </Drawer>
                 <Link href="/" underline="none" color="inherit">
                     <Typography 
@@ -74,6 +82,8 @@ const PrimaryAppBar = () => {
                         ChatVibe
                     </Typography>
                 </Link>
+                <Box sx={{ flexGrow: 1}}></Box>
+                <AccountButton />
             </Toolbar>
         </AppBar>
     )
