@@ -1,11 +1,9 @@
 import { 
     List, 
-    ListItem, 
-    ListItemButton, 
+    ListItem,  
     ListItemAvatar, 
     ListItemText, 
     Box, 
-    useTheme, 
     ListItemIcon, 
     Typography,
     Grid,

@@ -1,18 +1,22 @@
-from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase
+
 from server.models import Category, Server
-from server.serializers import ChannelSerializer, ServerSerializer, CategorySerializer
+from server.serializers import CategorySerializer, ChannelSerializer, ServerSerializer
 from utils.tests.base import BaseTestUser
 
 
 class CategorySerializerTest(TestCase):
     """Test suit for the CategorySerializer."""
+
     def setUp(self):
         # Create sample data for testing
         self.category_data = {
             "name": "Test Category",
             "description": "Test Description",
-            "icon": SimpleUploadedFile("icon.jpg", b"file_content", content_type="image/jpeg"),
+            "icon": SimpleUploadedFile(
+                "icon.jpg", b"file_content", content_type="image/jpeg"
+            ),
         }
 
     def test_valid_data(self):
@@ -23,7 +27,9 @@ class CategorySerializerTest(TestCase):
 
         # Check that the serialized data matches the input data
         self.assertEqual(serializer.validated_data["name"], self.category_data["name"])
-        self.assertEqual(serializer.validated_data["description"], self.category_data["description"])
+        self.assertEqual(
+            serializer.validated_data["description"], self.category_data["description"]
+        )
         self.assertIsNotNone(serializer.validated_data["icon"])
 
     def test_invalid_data(self):
@@ -31,7 +37,7 @@ class CategorySerializerTest(TestCase):
         invalid_data = {"description": "This is a test category"}
         serializer = CategorySerializer(data=invalid_data)
         self.assertFalse(serializer.is_valid())
-        
+
 
 class ChannelSerializerTest(TestCase, BaseTestUser):
     @classmethod

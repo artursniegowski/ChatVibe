@@ -5,11 +5,13 @@ from django.urls import reverse
 from rest_framework.test import APIClient
 
 from server.models import Category, Server
-from server.serializers import ServerSerializer, CategorySerializer
+from server.serializers import CategorySerializer, ServerSerializer
 from utils.tests.base import BaseTestUser
+
 
 class CategoryViewSetTest(TestCase):
     """Test suit for CategoryViewSet."""
+
     @classmethod
     def setUpTestData(cls) -> None:
         # Create sample data for testing
@@ -19,11 +21,11 @@ class CategoryViewSetTest(TestCase):
         cls.category2 = Category.objects.create(
             name="Test Category 2", description="Test Description 2"
         )
-    
+
     def setUp(self) -> None:
         # Initialize the test client
         self.client = APIClient()
-        
+
     def test_list_categories_all(self):
         url = reverse("server:category-list")
         response = self.client.get(url)
@@ -34,6 +36,7 @@ class CategoryViewSetTest(TestCase):
         serializer = CategorySerializer(categories, many=True)
         # Compare the serialized data with the response data
         self.assertEqual(response.data, serializer.data)
+
 
 class ServerViewSetTest(TestCase, BaseTestUser):
     @classmethod
