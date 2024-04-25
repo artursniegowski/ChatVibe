@@ -19,7 +19,7 @@ class UserData:
 
 
 class BaseTestUser:
-    """base clas with custom users generated with the class"""
+    """base class with custom users generated with the class"""
 
     def _get_superuser_data(self) -> None:
         """populate data for the users"""

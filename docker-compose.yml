@@ -19,12 +19,14 @@ services:
       sh -c "python manage.py wait_for_db &&
              python manage.py collectstatic --noinput &&
              python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             uvicorn app.asgi:application --host 0.0.0.0 --port 8000 --workers 4 --log-level debug --reload"
+#            python manage.py runserver 0.0.0.0:8000"  # added above to use the uvicorn - asgi server instead
     env_file:
       - ./.envs/.dev/.django
       - ./.envs/.dev/.postgres
     depends_on:
       - db
+      - redis
 
   db:
     container_name: db-postgres
@@ -85,6 +87,19 @@ services:
     depends_on:
       - backend
       - frontend
+
+  redis:
+    container_name: redis-database
+    restart: unless-stopped
+    build:
+      context: ./redis
+      dockerfile: ./docker/Dockerfile
+    # TODO: use expose later, so the contianer will not be accesible to public
+    # and only in the docker network, which will be enough for nginx
+    # expose:
+    #   - 6379
+    ports:
+      - "6379:6379"
 
 
 volumes:

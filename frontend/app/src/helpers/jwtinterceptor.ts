@@ -17,7 +17,8 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
     async (err) => {
         const originalRequest = err.config;
         if (err.response?.status === 403) {
-            const goRoot = () => navigate("/test");
+            //TODO: if forbiden refirect back to home / later to sigin !
+            const goRoot = () => navigate("/");
             goRoot();
         }
         throw err;

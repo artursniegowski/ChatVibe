@@ -6,3 +6,8 @@ DJANGO_SECRET_KEY='django-insecure-q8x%r=5hpm6m$9-*zsl%%c)^5qo7#k$w(p8s+)jelwssq
 # this can be a comma seperated list like 127.0.0.1,162.1.1.1,my-page.com
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
 DJANGO_DEBUG=1
+
+# redis service as defined in docker compose
+CHANNEL_LAYERS_REDIS_HOST = "redis"
+CHANNEL_LAYERS_REDIS_PORT = 6379
+CHANNEL_LAYERS_REDIS_DB_INDEX = 1

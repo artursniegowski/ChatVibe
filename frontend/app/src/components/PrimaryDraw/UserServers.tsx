@@ -1,36 +1,33 @@
 import { Avatar ,List, ListItem, ListItemButton, ListItemIcon, ListItemAvatar, Box, Typography, ListItemText } from "@mui/material";
-import useCrud from "../../hooks/useCrud";
-import { useEffect } from "react";
 import { BACKEND_MEDIA_URL } from "../../config";
 import { Link } from "react-router-dom";
 
 interface Server {
-    id: string,
-    name: string,
-    category: string,
-    icon: string,
+    id: string;
+    name: string;
+    category: string;
+    icon: string;
+};
+
+interface ServerChannelsProps {
+    data: Server[];
 };
 
 type Props = {
     open: boolean;
 };
 
-const PopularChannels: React.FC<Props> = ({ open }) => {
-    const { dataCRUD, error, isLoading, fetchData } = useCrud<Server>([], "/servers");
-
-    useEffect(() => {
-        fetchData();
-    }, []);
+const UserServers: React.FC<Props & ServerChannelsProps> = ({ open, data }) => {
 
     return (
         <>
             <Box sx={{ height: 50, p: 2, display: "flex", alignItems: "center", flex: "1 1 100%" }}>
                 <Typography sx={{ display: open ? "block" : "none" }}>
-                    Popular
+                    Servers
                 </Typography>
             </Box>
             <List>
-                {dataCRUD.map((item) => (
+                {data.map((item) => (
                     <ListItem 
                         key={item.id} 
                         disablePadding 
@@ -72,4 +69,4 @@ const PopularChannels: React.FC<Props> = ({ open }) => {
         </>
     );
 };
-export default PopularChannels;
+export default UserServers;

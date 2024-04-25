@@ -23,6 +23,7 @@ server {
         proxy_redirect off;
     }
 
+    # backed service - admin
     # TODO: cant get the /api/admin to work so for now I have only /admin/
     # the /api/admin crates problmes with redirect from django
     # technicaly should be solvebale with usign FORCE_SCRIPT_NAME in django settings
@@ -59,6 +60,19 @@ server {
         proxy_pass http://backend;
         proxy_redirect off;
     }
+
+    # backed service - websocket from django 
+    location /ws/ {
+        proxy_pass http://backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
 
     # frontend service 
     location / {

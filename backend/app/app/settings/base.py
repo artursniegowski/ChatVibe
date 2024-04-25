@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "core.apps.CoreConfig",
     "users.apps.UsersConfig",
     "server.apps.ServerConfig",
+    "webchat.apps.WebchatConfig",
     # Local/custom apps - END
     # third party apps - START
     "drf_spectacular",
@@ -199,4 +200,23 @@ SPECTACULAR_SETTINGS = {
     + "conversations within categorized servers and channels, similar to popular platforms like Discord.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": True,
+}
+
+# configuration for channel layers
+# https://channels.readthedocs.io/en/latest/topics/channel_layers.html#configuration
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            # Redis service name is 'redis'!
+            # and the redis database runs on port 6379/1
+            "hosts": [
+                {
+                    "host": os.environ.get("CHANNEL_LAYERS_REDIS_HOST"),
+                    "port": os.environ.get("CHANNEL_LAYERS_REDIS_PORT"),
+                    "db": os.environ.get("CHANNEL_LAYERS_REDIS_DB_INDEX"),
+                }
+            ],
+        },
+    },
 }

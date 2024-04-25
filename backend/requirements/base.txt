@@ -5,3 +5,6 @@ argon2-cffi==23.1.0,<23.2
 drf-spectacular==0.27.1,<28.0
 pillow==10.2.0,<10.3
 django-cors-headers==4.3.1,<4.4
+channels==4.1.0,<4.2
+uvicorn[standard]==0.29.0,<0.30
+channels-redis==4.2.0,<4.3

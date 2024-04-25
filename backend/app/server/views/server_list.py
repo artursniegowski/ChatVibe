@@ -58,7 +58,7 @@ class ServerViewSet(viewsets.ViewSet):
         request (Request): The HTTP request object.
 
         Returns:
-        A queryset of server filtered by the givern parameters.
+        A queryset of server filtered by the given parameters.
 
         Raises:
         AuthenticationFailed: If the user is not authenticated and filtering by user or server ID is requested.
@@ -93,6 +93,7 @@ class ServerViewSet(viewsets.ViewSet):
         queryset_filtered = self.get_queryset()
 
         # Ensure the user is authenticated if filtering by user or server ID
+        # TODO: enable back when authentication will be set up in place
         if (by_user or by_serverId) and not request.user.is_authenticated:
             raise AuthenticationFailed()
 

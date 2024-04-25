@@ -36,7 +36,7 @@ def server_banner_file_path(instance: "Server", file_name: str) -> str:
 
 
 class Server(Model):
-    """Category class defined"""
+    """Server class defined"""
 
     name = models.CharField(_("name"), max_length=100)
     owner = models.ForeignKey(

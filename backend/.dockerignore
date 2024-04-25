@@ -31,6 +31,7 @@ __pycache__
 # Coverage files
 app/coverage.xml
 app/.coverage
+app/htmlcov/
 
 # enviroments
 # for files

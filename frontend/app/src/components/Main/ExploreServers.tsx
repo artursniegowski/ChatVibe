@@ -86,7 +86,7 @@ const ExploreServers = () => {
                                         borderRadius: 0,
                                     }}
                                 >
-                                    <Link to={`/servers/${item.id}`}
+                                    <Link to={`/server/${item.id}`}
                                         style={{ textDecoration: "none", color: "inherit" }}
                                     >
                                         <CardMedia component="img"

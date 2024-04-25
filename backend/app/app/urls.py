@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from channels.routing import URLRouter
 from django.conf import settings
 
 # from django.conf.urls.static import static
@@ -25,6 +26,8 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+
+from webchat.ws_urls import urlpatterns as websocket_webchat_urlpatterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -43,6 +46,7 @@ urlpatterns = [
         name="redoc",
     ),
     path("api/", include("server.urls")),
+    path("api/", include("webchat.urls")),
 ]
 
 
@@ -50,6 +54,8 @@ if settings.DEBUG:
     # for serving files in development - only!!
     # not needed as media and static files served by nginx!
     # dont forget to run collectstatic to move all the static files!!
+    # only needed if django service is accessed directly without nginx like
+    # localhost:8000/api
     # urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
@@ -62,3 +68,8 @@ if settings.DEBUG:
 admin.site.site_header = "ChatVibe Dashboard Admin"
 admin.site.site_title = "ChatVibe Admin Portal"
 admin.site.index_title = "Welcome to ChatVibe Dashboard"
+
+
+websocket_urlpatterns = [
+    path("ws/", URLRouter(websocket_webchat_urlpatterns)),
+]
