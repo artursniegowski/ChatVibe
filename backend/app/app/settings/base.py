@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -189,9 +190,25 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         # using the default django sesion authentication
         # TODO: later change to JWT tokens or something more convinent!
-        "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    # AllowAny is set by defaul
+    # "DEFAULT_PERMISSION_CLASSES": [
+    #     "rest_framework.permissions.IsAuthenticated",
+    # ],
 }
+
+# adjusting settings for simplejwt
+# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html?highlight=SIGNING_KEY#settings
+SIMPLE_JWT = {
+    "SIGNING_KEY": os.environ.get("SIMPLE_JWT_SIGNING_KEY"),
+    # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    # TODO: change back to minutes - seconds are set jsut for testing
+    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+}
+
 
 # https://drf-spectacular.readthedocs.io/en/latest/readme.html#installation
 SPECTACULAR_SETTINGS = {
@@ -214,6 +231,7 @@ CHANNEL_LAYERS = {
                 {
                     "host": os.environ.get("CHANNEL_LAYERS_REDIS_HOST"),
                     "port": os.environ.get("CHANNEL_LAYERS_REDIS_PORT"),
+                    # set to 1 - can be adjusted
                     "db": os.environ.get("CHANNEL_LAYERS_REDIS_DB_INDEX"),
                 }
             ],

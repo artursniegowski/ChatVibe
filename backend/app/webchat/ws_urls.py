@@ -1,5 +1,5 @@
 """
-urls for the webchat web socket
+urls for the webchat websocket
 """
 
 from django.urls import path

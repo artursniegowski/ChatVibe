@@ -26,12 +26,13 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from webchat.ws_urls import urlpatterns as websocket_webchat_urlpatterns
 
 urlpatterns = [
+    # ## build in urls - START ## #
     path("admin/", admin.site.urls),
-    path("api/health/", include("core.urls")),
     # drf_spectacular - schema to download
     path("api/docs/schema/", SpectacularAPIView.as_view(), name="schema"),
     # Optional GUI - spectacualr / swagger - documentation:
@@ -45,8 +46,16 @@ urlpatterns = [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
+    # token authentication
+    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    # ## build in urls - END ## #
+    # ## custom urls - START ## #
+    path("api/health/", include("core.urls")),
     path("api/", include("server.urls")),
     path("api/", include("webchat.urls")),
+    path("api/", include("users.urls")),
+    # ## custom urls - END ## #
 ]
 
 

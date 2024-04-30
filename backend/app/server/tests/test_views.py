@@ -97,7 +97,7 @@ class ServerViewSetTest(TestCase, BaseTestUser):
         url = reverse("server:server-list")
         data = {"by_user": "true"}
         response = self.client.get(url, data)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_list_servers_by_serverId(self):
         # Authenticate the user
@@ -114,7 +114,7 @@ class ServerViewSetTest(TestCase, BaseTestUser):
         url = reverse("server:server-list")
         data = {"by_serverId": self.server.id}
         response = self.client.get(url, data)
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
     def test_list_servers_by_serverId_not_existing(self):
         # Authenticate the user

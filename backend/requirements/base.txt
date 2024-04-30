@@ -8,3 +8,4 @@ django-cors-headers==4.3.1,<4.4
 channels==4.1.0,<4.2
 uvicorn[standard]==0.29.0,<0.30
 channels-redis==4.2.0,<4.3
+djangorestframework-simplejwt==5.3.1,<5.4
