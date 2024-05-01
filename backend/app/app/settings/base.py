@@ -207,6 +207,12 @@ SIMPLE_JWT = {
     # TODO: change back to minutes - seconds are set jsut for testing
     "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    # custom settings SIMPLE_JWT - START
+    # JWT Cookies - custom settings for the JWTSetCookieMixin
+    "JWT_AUTH_COOKIE_NAME": "access_token",  # setting the cookie name for the JWT authentication
+    "JWT_AUTH_REFRESH_COOKIE_NAME": "refresh_token",
+    "JWT_AUTH_SAMESITE": "Lax",
+    # custom settings SIMPLE_JWT - END
 }
 
 
