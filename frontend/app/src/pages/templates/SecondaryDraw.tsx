@@ -1,5 +1,5 @@
 import { useTheme } from "@mui/material/styles";
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 type SecondaryDrawProps = {
     children: React.ReactNode;

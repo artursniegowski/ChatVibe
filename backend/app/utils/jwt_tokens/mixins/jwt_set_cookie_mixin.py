@@ -30,7 +30,6 @@ class JWTSetCookieMixin:
             "REFRESH_TOKEN_LIFETIME", timedelta(days=1).total_seconds()
         )
 
-
     def _set_access_token_cookie(self, response: Response, access_token: str) -> None:
         """sets the access token as a cookie in the response"""
         response.set_cookie(
@@ -66,9 +65,12 @@ class JWTSetCookieMixin:
                 access_token = response.data["access"]
                 self._set_access_token_cookie(response, access_token)
 
+                del response.data["access"]
+
             if "refresh" in response.data:
                 refresh_token = response.data["refresh"]
                 self._set_refresh_token_cookie(response, refresh_token)
 
-        del response.data['access']
+        # user = response.data["user_id"]
+
         return response

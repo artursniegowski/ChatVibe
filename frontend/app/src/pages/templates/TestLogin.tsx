@@ -12,16 +12,19 @@ const TestLogin = () => {
         try { 
             // getting the userId from the local storage
             const userId = localStorage.getItem("userId");
-            const access_token = localStorage.getItem("access_token");
+            // const userId = localStorage.getItem("userId");
+            // const access_token = localStorage.getItem("access_token");
             const getUserDetailUrl = `/user?by_userId=${userId}`;
             const url = `${BACKEND_BASE_URL}${getUserDetailUrl}`;
             // this view requires the user to be authenticated
             const res = await jwtAxios.get(
                 url,
-                {
-                    headers: {
-                        Authorization: `Bearer ${access_token}`
-                    },
+                {   
+                    withCredentials: true  // bc now we pass the cookies as http only tokens with the request, 
+                                            // and backedn will automatically check for the cookies if thye containe access token
+                    // headers: {
+                    //     Authorization: `Bearer ${access_token}`
+                    // },
                 }
             );
             const userDetails = res.data;

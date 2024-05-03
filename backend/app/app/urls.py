@@ -28,7 +28,10 @@ from drf_spectacular.views import (
 )
 
 # from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from users.views import JWTCookieTokenObtainPairView, JWTCookieTokenRefreshView
+from utils.jwt_tokens.views import (
+    JWTCookieTokenObtainPairView,
+    JWTCookieTokenRefreshView,
+)
 from webchat.ws_urls import urlpatterns as websocket_webchat_urlpatterns
 
 urlpatterns = [

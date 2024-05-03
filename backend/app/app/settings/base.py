@@ -191,7 +191,8 @@ REST_FRAMEWORK = {
         # using the default django sesion authentication
         # TODO: later change to JWT tokens or something more convinent!
         # "rest_framework.authentication.SessionAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "utils.jwt_tokens.authentication.JWTCookieAuthentication",
     ],
     # AllowAny is set by defaul
     # "DEFAULT_PERMISSION_CLASSES": [
@@ -206,7 +207,9 @@ SIMPLE_JWT = {
     # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     # TODO: change back to minutes - seconds are set jsut for testing
     "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=10),
+    "TOKEN_OBTAIN_SERIALIZER": "utils.jwt_tokens.serializers.CustomTokenObtainPairSerializer",
+    "TOKEN_REFRESH_SERIALIZER": "utils.jwt_tokens.serializers.CustomTokenRefreshSerializer",
     # custom settings SIMPLE_JWT - START
     # JWT Cookies - custom settings for the JWTSetCookieMixin
     "JWT_AUTH_COOKIE_NAME": "access_token",  # setting the cookie name for the JWT authentication

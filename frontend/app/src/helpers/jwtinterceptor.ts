@@ -2,6 +2,7 @@
 import axios, { AxiosInstance } from "axios";
 import { useNavigate } from "react-router-dom";
 import { BACKEND_BASE_URL } from "../config";
+import { useAuthService } from "../services/AuthServices";
 
 const API_BACKEND_BASE_URL = BACKEND_BASE_URL;
 
@@ -9,6 +10,7 @@ const API_BACKEND_BASE_URL = BACKEND_BASE_URL;
 const useAxiosWithInterceptor = (): AxiosInstance => {
     const jwtAxios = axios.create({ baseURL: API_BACKEND_BASE_URL});
     const navigate = useNavigate();
+    const { logout } = useAuthService();
 
     jwtAxios.interceptors.response.use(
         (resp) => {
@@ -23,37 +25,26 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
         // make the user to log in again
         // we get 401 - forbiden or 403 unauthorized if we are not autheticated
         if (err.response?.status === 401 || 403) {
-            // first using a refresh  token to get a new access token
-            const refreshToken = localStorage.getItem("refresh_token");
+            axios.defaults.withCredentials = true;
             const refresTokenURL = "/token/refresh/";
-            if (refreshToken) {
-                // only if a refresh token exists
-                try {
-                    const refreshResponse = await axios.post(
-                        `${API_BACKEND_BASE_URL}${refresTokenURL}`,
-                        {
-                            refresh: `${refreshToken}`,
-                        },
-                    );
-                    const newAccessToken = refreshResponse.data.access;
-                    localStorage.setItem("access_token", newAccessToken);
-                    // refreing to the original request
-                    // changing the access token that was applied to the original
-                    // request, and then we are just going to change it with 
-                    // the new access token
-                    originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+            // only if a refresh token exists
+            try {
+                const resp = await axios.post(
+                    `${API_BACKEND_BASE_URL}${refresTokenURL}`,
+                );
+                if (resp["status"] == 200) {
                     // and now we simply retry the original request
                     return jwtAxios(originalRequest);
-                } catch (refreshError) { 
-                    // if we get an error with getting a new access token we will redirect to login page
-                    // for example we cant access the refres token, or it expired
-                    navigate('/login');
-                    throw refreshError;
-                }
-            } else {
-                // so if we dont have a refresh token we simply navigate the user to login page
-                navigate('/login');
-            };
+                };
+            } catch (refreshError) { 
+                logout();
+                // if we get an error with getting a new access token we will redirect to login page
+                // for example we cant access the refres token, or it expired
+                const goLogin = () => navigate('/login');
+                goLogin();
+                return Promise.reject(refreshError);
+            }
+
         }
         throw err;
     }
