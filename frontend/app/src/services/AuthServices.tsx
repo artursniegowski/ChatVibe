@@ -72,7 +72,7 @@ export function useAuthService(): AuthServiceProps {
             getUserDetails();
             
         } catch (error: any) {
-            return error;
+            return error.response.status;
         }
     };
 
