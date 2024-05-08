@@ -73,6 +73,20 @@ export function useAuthService(): AuthServiceProps {
         }
     };
 
+    const refreshAccessToken = async () => {
+        try {
+            const refreshTokenUrl = "/token/refresh/";
+            const url = `${BACKEND_BASE_URL}${refreshTokenUrl}`;
+            // try and connect to the refresh endpoint to retrive a new access token
+            // which should be set access token by the browser as a new http only cookie
+            await axios.post(
+                url, {}, {withCredentials: true}
+            ) 
+        } catch (refreshError) {
+            return Promise.reject(refreshError);
+        };
+    };
+
     const logout = () => {
         // removing data storage points
         localStorage.setItem("isLoggedIn","false");
@@ -81,5 +95,5 @@ export function useAuthService(): AuthServiceProps {
         setIsLoggedIn(false);
     };
 
-    return {login, isLoggedIn, logout}
+    return {login, isLoggedIn, logout, refreshAccessToken}
 };

@@ -15,7 +15,18 @@ class WebChatConsumer(JsonWebsocketConsumer):
         self.user = None
 
     def connect(self):
+        self.user = self.scope.get("user")
         self.accept()
+        # the middlewre wil be called eveytime we try making a new web scoket connection
+        # adding authentication of the user before actully connecting
+        # grabing the token, and trying to validate it - this will be done
+        # in the custom middleware
+        # and now we can check if the user is logged in
+
+        if not self.user.is_authenticated:
+            # closing the connection
+            self.close(code=4001)
+
         # getting the channel id
         self.channel_id = self.scope["url_route"]["kwargs"]["channel_id"]
 

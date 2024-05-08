@@ -5,10 +5,12 @@ from unittest.mock import MagicMock
 from asgiref.sync import sync_to_async
 from channels.layers import get_channel_layer
 from channels.routing import URLRouter
-from django.test import SimpleTestCase
+from django.test import AsyncClient, SimpleTestCase
+from django.urls import reverse
 
 from app import urls
 from utils.tests.base import BaseTestUser
+from webchat.middleware import JWTAuthMiddleWare
 from webchat.models import Conversation, Message
 
 # https://github.com/django/channels/issues/1942
@@ -28,14 +30,38 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
         cls.server_id = "test_server_id"
         cls.channel_id = "test_channel_id"
         cls.user = cls().get_test_active_regularuser()
-        cls.application = URLRouter(urls.websocket_urlpatterns)
+        cls.application = JWTAuthMiddleWare(URLRouter(urls.websocket_urlpatterns))
         cls.channel_layer = get_channel_layer()
+
+    # addint this code to setupclass would save testing time but would require
+    # adjustment of BaseTestUser to return the test data for users
+    # TODO: investinget this further
+    async def get_token(self, user) -> str:
+        """returns token for the given user"""
+        client = AsyncClient()
+        self._get_regularuser_active_data()
+        password = self.regularuser_active_data.password
+        response = await client.post(
+            reverse("token_obtain_pair"),
+            data={"email": user.email, "password": password},
+        )
+        token = response.cookies.get("access_token").value
+        return token
+
+    async def get_headers(self) -> dict:
+        """adding headers with tokens as cookie"""
+        token = await self.get_token(self.user)
+        headers = {b"cookie": f"access_token={token}".encode()}
+        return headers
 
     async def test_connect_websocket(self):
         # this way the asynchronous test wont mess with other running tests
+        headers = await self.get_headers()
         unique_channel_id = self.channel_id + "connect_simple"
         communicator = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         connected, subprotocol = await communicator.connect()
         self.assertTrue(connected)
@@ -43,9 +69,12 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
 
     async def test_disconnect(self):
         # this way the asynchronous test wont mess with other running tests
+        headers = await self.get_headers()
         unique_channel_id = self.channel_id + "disconect_simple"
         communicator = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         connected, subprotocol = await communicator.connect()
         self.assertTrue(connected)
@@ -55,19 +84,22 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
         self.assertTrue(response)  # Ensure no further messages received
 
     async def test_invalid_url(self):
+        headers = await self.get_headers()
         communicator = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/"
+            self.application, f"/ws/{self.server_id}/", headers=headers
         )  # Missing channel_id
         with self.assertRaises(ValueError):
             connected, subprotocol = await communicator.connect()
 
     async def test_message_handling_with_message_conversation_creation(self):
         # this way the asynchronous test wont mess with other running tests
+        headers = await self.get_headers()
         unique_channel_id = self.channel_id + "conversation"
         communicator = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
-
         connected, subprotocol = await communicator.connect()
         self.assertTrue(connected)
 
@@ -99,12 +131,17 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
 
     async def test_group_operations(self):
         # this way the asynchronous test wont mess with other running tests
+        headers = await self.get_headers()
         unique_channel_id = self.channel_id + "operations"
         communicator1 = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         communicator2 = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         connected1, _ = await communicator1.connect()
         self.assertTrue(connected1)
@@ -136,11 +173,16 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
 
         # this way the asynchronous test wont mess with other running tests
         unique_channel_id = self.channel_id + "discard"
+        headers = await self.get_headers()
         communicator1 = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         communicator2 = WebsocketCommunicator(
-            self.application, f"/ws/{self.server_id}/{unique_channel_id}/"
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
         )
         connected1, _ = await communicator1.connect()
         self.assertTrue(connected1)

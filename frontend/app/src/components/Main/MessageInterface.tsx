@@ -8,6 +8,7 @@ import { Avatar, Box, List, ListItem, ListItemAvatar, ListItemText, Typography, 
 import MessageInterfaceChannels from "./MessageInterfaceChannels";
 import React from "react";
 import Scroll from "./Scroll";
+import { useAuthService } from "../../services/AuthServices";
 
 interface SendMessageData {
     type: string;
@@ -35,6 +36,7 @@ const MessageInterface = (props: ServerChannelProps) => {
     const [newMessage, setNewMessage] = useState<Message[]>([]);
     const [ message, setMessage] = useState("");
     const { serverId, channelId } = useParams();
+    const { logout, refreshAccessToken } = useAuthService();
     const { fetchData } = useCrud<ServerData>(
         [],
         `/messages?by_channelId=${channelId}`
@@ -43,6 +45,10 @@ const MessageInterface = (props: ServerChannelProps) => {
     const socketPath = `/${serverId}/${channelId}/`;
     // making only a request if channelId exists
     const socketURL = channelId ? `${BACKEND_WEBSOCKET_BASE_URL}${socketPath}` : null;
+
+    // state to capture the reconnection
+    const [reconnectionAttempt, setReconnectionAttempt] = useState(0);
+    const maxConnectionAttempts = 4;
 
     const { sendJsonMessage } = useWebSocket(socketURL, {
         onOpen: async () => {
@@ -55,8 +61,19 @@ const MessageInterface = (props: ServerChannelProps) => {
                 console.log(error);
             };
         },
-        onClose: () => {
+        onClose: (event: CloseEvent) => {
+            // if we get autheticaaiton error we will try to refresh the token
+            if (event.code == 4001){
+                console.log("Authentication Error");
+                refreshAccessToken().catch((error) => {
+                    if (error.response && error.response.status === 401) {
+                        // so refresh token was not valid then logout the user
+                        logout();
+                    }
+                });
+            };
             console.log("Closed");
+            setReconnectionAttempt((prevAttempt) => prevAttempt + 1);
         },
         onError: () => {
             console.log("Error");
@@ -68,6 +85,24 @@ const MessageInterface = (props: ServerChannelProps) => {
             setNewMessage( (prev_msg) => [...prev_msg, data.new_message]);
             setMessage("");
         },
+        // what should happen if we, for example do have an error and we
+        // do close the connection maybe prematurly, we can go ahead and try
+        // and reconnect automatically
+
+        // using the should reconnect, to try and reconnect shoudl there be a problem
+        // should we retrive 4001 error, when we close and we are going to set this 
+        // so it just reconnects four times
+        shouldReconnect: (closeEvent) => {
+            if (closeEvent.code === 4001 && reconnectionAttempt >= maxConnectionAttempts) {
+                setReconnectionAttempt(0);
+                // in this case we want to stop reconnecting
+                return false;
+            };
+            // continue connection
+            return true;
+        },
+        // settign the reconection interval to 2 seconds
+        reconnectInterval: 2000,
     });
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

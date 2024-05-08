@@ -204,10 +204,8 @@ REST_FRAMEWORK = {
 # https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html?highlight=SIGNING_KEY#settings
 SIMPLE_JWT = {
     "SIGNING_KEY": os.environ.get("SIMPLE_JWT_SIGNING_KEY"),
-    # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    # TODO: change back to minutes - seconds are set jsut for testing
-    "ACCESS_TOKEN_LIFETIME": timedelta(seconds=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(seconds=10),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "TOKEN_OBTAIN_SERIALIZER": "utils.jwt_tokens.serializers.CustomTokenObtainPairSerializer",
     "TOKEN_REFRESH_SERIALIZER": "utils.jwt_tokens.serializers.CustomTokenRefreshSerializer",
     # custom settings SIMPLE_JWT - START
