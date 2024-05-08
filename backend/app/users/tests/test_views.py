@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework import status
@@ -72,3 +73,27 @@ class UserViewSetTest(APITestCase, BaseTestUser):
         url = reverse("users:user-list")
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class LogOutAPIViewTestCase(APITestCase):
+    def test_logout(self):
+        # Make a POST request to the logout endpoint
+        response = self.client.post(reverse("users:logout"))
+
+        # Assert that the response status code is 200 OK
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Assert that the refresh and access tokens cookies are cleared
+        refresh_token_name = refresh_token_name = getattr(
+            settings, "SIMPLE_JWT", {}
+        ).get("JWT_AUTH_REFRESH_COOKIE_NAME", "refresh_token")
+        access_token_name = self.access_token_name = getattr(
+            settings, "SIMPLE_JWT", {}
+        ).get("JWT_AUTH_COOKIE_NAME", "access_token")
+        self.assertIn(refresh_token_name, response.cookies)
+        self.assertIn(access_token_name, response.cookies)
+        self.assertEqual(response.cookies[refresh_token_name].value, "")
+        self.assertEqual(response.cookies[access_token_name].value, "")
+        # Assert that the expiration of the cookies is set to 0
+        self.assertEqual(response.cookies[refresh_token_name]["expires"], 0)
+        self.assertEqual(response.cookies[access_token_name]["expires"], 0)

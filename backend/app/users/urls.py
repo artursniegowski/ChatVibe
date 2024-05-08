@@ -16,4 +16,5 @@ app_name = "users"
 urlpatterns = [
     # ex: "api/"
     path("", include(router.urls)),
+    path("logout/", views.LogOutAPIView.as_view(), name="logout"),
 ]
