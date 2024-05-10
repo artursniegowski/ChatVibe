@@ -226,9 +226,9 @@ SPECTACULAR_SETTINGS = {
     "SWAGGER_UI_SETTINGS": {
         # sets the access_token cookie, which needs to be delete manualy
         # after it expires - we will get a 401-unauthorized when accessing
-        # the swagger-UI, 
+        # the swagger-UI,
         # we get get a new token by posting email and passsword to
-        # /api/token/  , this will set both refresh and access token, 
+        # /api/token/  , this will set both refresh and access token,
         # then we either set this again in the authorization, or just keep it
         # in the cookie
         "persistAuthorization": True,

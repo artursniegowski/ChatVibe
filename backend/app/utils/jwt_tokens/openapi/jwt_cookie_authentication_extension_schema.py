@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 from drf_spectacular.extensions import OpenApiAuthenticationExtension
 
+
 # this works only partialy, it still sets the cookie, but also using
 # localstorage, delete manulay the access token to get rid of 401
 # if the token expires or is invalid
