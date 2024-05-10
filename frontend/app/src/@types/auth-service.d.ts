@@ -4,4 +4,6 @@ export interface AuthServiceProps {
     logout: () => void;
     // by using Promis<void> we indicating this function is asynchronous
     refreshAccessToken: () => Promise<void>;
+    // response will be asynchornous so a Promis
+    register: (email: string, password: string) => Promise<any>;
 }

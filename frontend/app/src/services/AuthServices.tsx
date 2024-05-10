@@ -90,6 +90,25 @@ export function useAuthService(): AuthServiceProps {
         };
     };
 
+    const register = async (email: string, password: string) => {
+        try {
+            const registerUrl = "/register/";
+            const url = `${BACKEND_BASE_URL}${registerUrl}`;
+            const res = await axios.post(
+                url,
+                {
+                    email,
+                    password,
+                // The browser will include any relevant credentials associated with the current origin
+                // so basicaly the browser will send the tokens for authentication automaticaly 
+                }, { withCredentials: true },  
+            );
+            return res.status;
+        } catch (error: any) {
+            return error.response.status;
+        }
+    };
+
     const logout = async () => {
         // removing data storage points
         localStorage.setItem("isLoggedIn","false");
@@ -110,5 +129,5 @@ export function useAuthService(): AuthServiceProps {
         };
     };
 
-    return {login, isLoggedIn, logout, refreshAccessToken}
+    return {login, isLoggedIn, logout, refreshAccessToken, register}
 };

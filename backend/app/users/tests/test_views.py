@@ -97,3 +97,43 @@ class LogOutAPIViewTestCase(APITestCase):
         # Assert that the expiration of the cookies is set to 0
         self.assertEqual(response.cookies[refresh_token_name]["expires"], 0)
         self.assertEqual(response.cookies[access_token_name]["expires"], 0)
+
+
+class RegisterViewTestCase(APITestCase):
+    def setUp(self):
+        self.register_url = reverse("users:register")
+
+    def test_valid_registration(self):
+        data = {"email": "test@example.com", "password": "testpassword"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue("email" in response.data)
+
+    def test_invalid_registration_missing_field_password(self):
+        data = {"email": "test@example.com"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_registration_missing_field_email(self):
+        data = {"password": "testpassword"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_invalid_registration_existing_email(self):
+        # Create a user with the same email
+        User.objects.create_user(email="test@example.com", password="existingpassword")
+        data = {"email": "test@example.com", "password": "testpassword"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue("email" in response.data)
+
+    def test_invalid_email_missing_at(self):
+        data = {"email": "testexample.com", "password": "testpassword"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue("email" in response.data)
+
+    def test_forbidden_email(self):
+        data = {"email": "admin@admin.com", "password": "testpassword"}
+        response = self.client.post(self.register_url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)

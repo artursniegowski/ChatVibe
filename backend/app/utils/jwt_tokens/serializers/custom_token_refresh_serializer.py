@@ -27,4 +27,4 @@ class CustomTokenRefreshSerializer(TokenRefreshSerializer):
         if attrs["refresh"]:
             return super().validate(attrs)
 
-        return InvalidToken("No valid refresh token found.")
+        raise InvalidToken

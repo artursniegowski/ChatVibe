@@ -17,4 +17,5 @@ urlpatterns = [
     # ex: "api/"
     path("", include(router.urls)),
     path("logout/", views.LogOutAPIView.as_view(), name="logout"),
+    path("register/", views.RegisterView.as_view(), name="register"),
 ]

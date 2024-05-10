@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import { AuthServiceProvider } from "./context/AuthContext";
 import TestLogin from "./pages/templates/TestLogin";
 import ProtectedRoute from "./services/ProtectedRoute";
+import Register from "./pages/Register";
 
 
 
@@ -29,6 +30,7 @@ const App = () => {
           />
           <Route path="/explore/:categoryName" element={ <Explore />} />
           <Route path="/login" element={ <Login />} />
+          <Route path="/register" element={ <Register />} />
           <Route 
             path="/testlogin" 
             element={

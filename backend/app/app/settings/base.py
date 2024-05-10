@@ -188,8 +188,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     # https://www.django-rest-framework.org/api-guide/settings/#default_authentication_classes
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        # using the default django sesion authentication
-        # TODO: later change to JWT tokens or something more convinent!
+        # changeed to JWT tokens authentication - http only cookie !
         # "rest_framework.authentication.SessionAuthentication",
         # "rest_framework_simplejwt.authentication.JWTAuthentication",
         "utils.jwt_tokens.authentication.JWTCookieAuthentication",
@@ -224,7 +223,19 @@ SPECTACULAR_SETTINGS = {
     + "conversations within categorized servers and channels, similar to popular platforms like Discord.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": True,
+    "SWAGGER_UI_SETTINGS": {
+        # sets the access_token cookie, which needs to be delete manualy
+        # after it expires - we will get a 401-unauthorized when accessing
+        # the swagger-UI, 
+        # we get get a new token by posting email and passsword to
+        # /api/token/  , this will set both refresh and access token, 
+        # then we either set this again in the authorization, or just keep it
+        # in the cookie
+        "persistAuthorization": True,
+        "withCredentials": True,
+    },
 }
+
 
 # configuration for channel layers
 # https://channels.readthedocs.io/en/latest/topics/channel_layers.html#configuration

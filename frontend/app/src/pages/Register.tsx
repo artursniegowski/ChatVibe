@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthServiceContext } from "../context/AuthContext";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
-const Login = () => {
-
+const Register = () => {
    // Function to validate email format
    const isValidEmail = (email: string) => {
         // Regular expression for email validation
@@ -12,7 +11,7 @@ const Login = () => {
         return emailRegex.test(email);
     };
 
-    const { login } = useAuthServiceContext();
+    const { register } = useAuthServiceContext();
     const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
@@ -36,17 +35,27 @@ const Login = () => {
         },
         onSubmit: async (values) => {
             const {email, password} = values;
-            const responseStatus = await login(email, password);
-            if (responseStatus === 401) {
-                console.log("Unauthorised");
+            const responseStatus = await register(email, password);
+            if ( responseStatus === 409 ){
+                console.log("409: CONFLICT");
+                formik.setErrors({
+                    email: "Invalid email",
+                });  
+            } else if ( responseStatus === 400 ){
+                console.log("400: Bad Request");
+                formik.setErrors({
+                    email: "Invalid email",
+                });  
+            } else if (responseStatus === 401) {
+                console.log("401: Unauthorized");
                 formik.setErrors({
                     email: "Invalid email or password",
                     password: "Invalid email or password",
                 });
             } else {
-                // if no error occured we want to navigate teh user to the homepage
-                navigate("/");
-                //     navigate("/testlogin");
+                // after they are signed up
+                // if no error occured we want to navigate the user to the login page
+                navigate("/login");
             };
         },
     });
@@ -69,7 +78,7 @@ const Login = () => {
                         pb: 2,
                     }}
                 >
-                    Sign in
+                    Register
                 </Typography>
                 <Box component="form" onSubmit={formik.handleSubmit}
                     sx={{ mt: 1}}
@@ -110,4 +119,4 @@ const Login = () => {
         </Container>
     );
 };
-export default Login;
+export default Register;

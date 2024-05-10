@@ -71,6 +71,8 @@ class JWTSetCookieMixin:
                 refresh_token = response.data["refresh"]
                 self._set_refresh_token_cookie(response, refresh_token)
 
+                del response.data["refresh"]
+
         # user = response.data["user_id"]
 
         return response
