@@ -1,13 +1,12 @@
 from drf_spectacular.utils import extend_schema
 from rest_framework import status
 
-
 token_refresh_post_schema = extend_schema(
     # request=CustomTokenRefreshSerializer,
     request=None,
-    responses={ 
+    responses={
         (status.HTTP_200_OK, "application/json"): {},
-        (status.HTTP_401_UNAUTHORIZED,  "application/json"): {
+        (status.HTTP_401_UNAUTHORIZED, "application/json"): {
             "description": "Refresh token wrong or missing.",
             "type": "object",
             "properties": {
@@ -20,6 +19,6 @@ token_refresh_post_schema = extend_schema(
                     "default": "token_not_valid",
                 },
             },
-        }
+        },
     },
 )

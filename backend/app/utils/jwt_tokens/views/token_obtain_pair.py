@@ -14,8 +14,8 @@ from utils.jwt_tokens.schema import token_obtain_post_schema
 class JWTCookieTokenObtainPairView(JWTSetCookieMixin, TokenObtainPairView):
     """
     TokenObtainPairView with jwt http only cookie
-  
-    A new access token and refresh token will be set as HTTP-only cookies if the 
+
+    A new access token and refresh token will be set as HTTP-only cookies if the
     provided email and password are correct.
     """
 

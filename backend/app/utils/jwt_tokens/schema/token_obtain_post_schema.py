@@ -14,9 +14,9 @@ token_obtain_post_schema = extend_schema(
                     "type": "string",
                     "format": "uuid",
                 },
-            },        
+            },
         },
-        (status.HTTP_401_UNAUTHORIZED,  "application/json"): {
+        (status.HTTP_401_UNAUTHORIZED, "application/json"): {
             "description": "Email and password dont match a user.",
             "type": "object",
             "properties": {
@@ -26,28 +26,18 @@ token_obtain_post_schema = extend_schema(
                 },
             },
         },
-        (status.HTTP_400_BAD_REQUEST,  "application/json"): {
+        (status.HTTP_400_BAD_REQUEST, "application/json"): {
             "description": "Email or password is missing in the body of the request.",
             "type": "object",
             "properties": {
-                "email": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "password": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
+                "email": {"type": "array", "items": {"type": "string"}},
+                "password": {"type": "array", "items": {"type": "string"}},
             },
             "required": ["email", "password"],
             "example": {
                 "email": ["This field is required."],
-                "password": ["This field is required."]
-            }
+                "password": ["This field is required."],
+            },
         },
     },
 )
