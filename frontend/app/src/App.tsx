@@ -9,8 +9,8 @@ import { AuthServiceProvider } from "./context/AuthContext";
 import TestLogin from "./pages/templates/TestLogin";
 import ProtectedRoute from "./services/ProtectedRoute";
 import Register from "./pages/Register";
-
-
+import MembershipProvider from "./context/MemberContext";
+import MembershipCheck from "./components/Membership/MembershipCheck";
 
 const App = () => {
   return (
@@ -24,7 +24,11 @@ const App = () => {
             element=
               { 
                 <ProtectedRoute>
-                  <Server />
+                  <MembershipProvider>
+                    <MembershipCheck>
+                      <Server />
+                    </MembershipCheck>
+                  </MembershipProvider>
                 </ProtectedRoute>
               } 
           />

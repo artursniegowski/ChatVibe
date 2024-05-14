@@ -24,7 +24,7 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
         // if refresh token will also expiere we will have to redirect the user and
         // make the user to log in again
         // we get 401 - forbiden or 403 unauthorized if we are not autheticated
-        if (err.response?.status === 401 || 403) {
+        if (err.response?.status === 401 || err.response?.status === 403) {
             axios.defaults.withCredentials = true;
             const refresTokenURL = "/token/refresh/";
             // only if a refresh token exists
@@ -44,11 +44,11 @@ const useAxiosWithInterceptor = (): AxiosInstance => {
                 goLogin();
                 return Promise.reject(refreshError);
             }
-
         }
-        throw err;
+        // returning the error to he original component
+        return Promise.reject(err);
     }
-    )
+    );
     return jwtAxios;
 };
 
