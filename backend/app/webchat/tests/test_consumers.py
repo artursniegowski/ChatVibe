@@ -9,6 +9,7 @@ from django.test import AsyncClient, SimpleTestCase
 from django.urls import reverse
 
 from app import urls
+from server.models import Category, Server
 from utils.tests.base import BaseTestUser
 from webchat.middleware import JWTAuthMiddleWare
 from webchat.models import Conversation, Message
@@ -27,20 +28,26 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
 
     @classmethod
     def setUpClass(cls):
-        cls.server_id = "test_server_id"
-        cls.channel_id = "test_channel_id"
         cls.user = cls().get_test_active_regularuser()
+        cls.non_member_user = cls().get_test_staffuser()
+        cls.category = Category.objects.create(
+            name="Test Category", description="Test Description"
+        )
+        cls.server = Server.objects.create(
+            name="Test server", owner=cls.user, category=cls.category
+        )
+        cls.server.member.add(cls.user)
+        cls.server_id = cls.server.id
+        cls.channel_id = "test_channel_id"
         cls.application = JWTAuthMiddleWare(URLRouter(urls.websocket_urlpatterns))
         cls.channel_layer = get_channel_layer()
 
     # addint this code to setupclass would save testing time but would require
     # adjustment of BaseTestUser to return the test data for users
     # TODO: investinget this further
-    async def get_token(self, user) -> str:
+    async def get_token(self, user, password) -> str:
         """returns token for the given user"""
         client = AsyncClient()
-        self._get_regularuser_active_data()
-        password = self.regularuser_active_data.password
         response = await client.post(
             reverse("token_obtain_pair"),
             data={"email": user.email, "password": password},
@@ -48,11 +55,57 @@ class WebChatConsumerTestCase(SimpleTestCase, BaseTestUser):
         token = response.cookies.get("access_token").value
         return token
 
-    async def get_headers(self) -> dict:
+    async def get_headers(self, user=None) -> dict:
         """adding headers with tokens as cookie"""
-        token = await self.get_token(self.user)
+        if not user:  # for regualr user defined in the base class
+            user = self.user
+            self._get_regularuser_active_data()
+            password = self.regularuser_active_data.password
+        else:  # for staff user defined in the base class
+            self._get_staffuser_data()
+            password = self.staffuser_data.password
+        token = await self.get_token(user, password)
         headers = {b"cookie": f"access_token={token}".encode()}
         return headers
+
+    async def test_unauthenticated_user_connect(self):
+        # Simulate an unauthenticated user by not providing any headers
+        headers = {b"cookie": f"access_token={'not.valid.token'}".encode()}
+        unique_channel_id = self.channel_id + "test_unauthenticated_user_connect"
+        communicator = WebsocketCommunicator(
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
+        )
+        connected, close_code = await communicator.connect()  # Connect to WebSocket
+        self.assertFalse(connected)  # Ensure connection is closed
+        # Check if the close code is 4001
+        self.assertEqual(
+            close_code, 4001
+        )  # Check if the expected close code is returned
+
+    async def test_non_member_cannot_send_message(self):
+        # Create a user who is not a member of the server
+        headers = await self.get_headers(self.non_member_user)
+        unique_channel_id = self.channel_id + "non_member_send_message"
+        # Connect the WebSocket communicator for the non-member user
+        communicator = WebsocketCommunicator(
+            self.application,
+            f"/ws/{self.server_id}/{unique_channel_id}/",
+            headers=headers,
+        )
+        connected, _ = await communicator.connect()
+
+        # Send a message attempt
+        message = {"message": "This message should not be sent"}
+        await communicator.send_json_to(message)
+
+        # Check that the consumer did not send any messages
+        response = await communicator.receive_nothing()
+        self.assertTrue(response)
+
+        # Disconnect the communicator
+        await communicator.disconnect()
 
     async def test_connect_websocket(self):
         # this way the asynchronous test wont mess with other running tests
