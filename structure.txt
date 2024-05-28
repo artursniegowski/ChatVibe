@@ -29,6 +29,7 @@ project_root/
 │   │   ├── base.txt         # base requirements for porduction and development - common - it is used as base and read in, in the other files
 │   │   ├── dev.txt          # requirements for development - python packages
 │   │   └── ...              # Other requirements files (optional)
+│   ├── .dockerignore        # Docker Ignore file
 │   └── ...                  # Other Django-related files
 │
 ├── database/                # PostgreSQL Database (optional)
@@ -37,15 +38,30 @@ project_root/
 │   │   └── ...              # Other Docker-related files (optional)
 │   └── ...                  # Other database-related files
 │
+├── docs/                    # documentation related files
+│   └── ...                  # Other documentation-related files
+│
 ├── frontend/                # React Frontend Application
-│   ├── public/              # Public files (HTML, assets)
-│   ├── src/                 # React App Source Code
+│   ├── app/                 # React Frontend Application
+│   │   └── ...              # Public files (HTML, assets, etc)
 │   ├── docker/              # Docker Configuration (optional)
 │   │   ├── Dockerfile       # Dockerfile for React Frontend
 │   │   └── ...              # Other Docker-related files (optional)
+│   ├── .dockerignore        # Docker Ignore file
 │   └── ...                  # Other React-related files
 │
-├── .dockerignore            # Docker Ignore file
+├── proxy/                   # nginx - reverse proxy
+│   ├── docker/              # Docker Configuration
+│   │   ├── Dockerfile       # Dockerfile for nginx - reverse proxy
+│   │   └── ...              # Other Docker-related files (optional)
+│   └── ...                  # Other proxy-related files
+│
+├── redis/                   # redis - databas
+│   ├── docker/              # Docker Configuration
+│   │   ├── Dockerfile       # Dockerfile for redis
+│   │   └── ...              # Other Docker-related files (optional)
+│   └── ...                  # Other redis files
+│
 ├── .gitignore               # Git Ignore file
 ├── docker-compose.yml       # docker-compose main fail
 ├── Makefile                 # Make file with all the commands for make
